@@ -1,0 +1,8 @@
+pandas>=2.2
+python-calamine>=0.3
+pyodbc>=5.1
+pyyaml>=6.0
+python-dotenv>=1.0
+# desarrollo
+pytest>=8
+openpyxl>=3.1

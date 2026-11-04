@@ -1,0 +1,36 @@
+# Configuración general del pipeline ZSAC
+# No pongas credenciales aquí — eso va en config/.env
+
+origen:
+  carpeta: "C:\\Users\\aguzman\\OneDrive - Industria Colombiana de Logistica y Transporte\\Documentos\\ZSAC CONSOLIDADO"
+  # Hojas a buscar, en orden de preferencia
+  hojas: ["BD", "DB"]
+  # Reintentos ante archivos bloqueados (abiertos en Excel / sincronizando OneDrive)
+  reintentos: 3
+  espera_segundos: 10
+  # Carpeta temporal donde se copia cada archivo antes de leerlo (vacío = %TEMP%\zsac_etl)
+  carpeta_temporal: ""
+
+sql_server:
+  servidor: "ICMEMEOPERACI02"
+  base_datos: "AnaliticaOperativa"
+  driver: "ODBC Driver 18 for SQL Server"
+  trusted_connection: true   # true = autenticación de Windows (no requiere usuario/clave)
+  trust_server_certificate: true
+
+tablas:
+  staging: "staging.ZSAC_Stage"
+  core: "core.HechosZSAC"
+  rechazos: "core.ZSAC_Rechazos"
+  archivos: "core.ZSAC_Archivos"
+  control: "core.ETL_Control"
+  nombre_proceso: "zsac"
+
+reglas:
+  # Una factura es "real" si contiene al menos N dígitos consecutivos (después de limpiarla)
+  factura_min_digitos: 4
+
+logging:
+  carpeta: "logs"
+  nivel: "INFO"
+  rotacion_dias: 30

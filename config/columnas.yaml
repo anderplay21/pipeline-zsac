@@ -1,0 +1,58 @@
+# Mapeo del encabezado ZSAC (hoja BD) a columnas SQL.
+# - origen: nombre en el Excel. Se empareja sin importar mayúsculas, espacios en los extremos
+#   ni el sufijo ".N" que agrega pandas a columnas repetidas.
+# - alias: otros nombres aceptados para la misma columna (opcional).
+# - tipo: texto | id | fecha | fecha_hora | entero | decimal
+#   id = texto; si es solo dígitos se le quitan los ceros a la izquierda.
+# - obligatoria: si falta la columna se rechaza el archivo; si falta el valor se rechaza la fila.
+# - escala (decimal): decimales con que se guarda (debe coincidir con el DDL)
+# - ambiguo (decimal): cómo leer "d.ddd" sin coma -> miles | decimal
+# - guardar_txt: guarda además el texto original en <destino>_txt
+#
+# "Fecha de factura" (siempre vacía) y "Fecha de Factura" se normalizan al mismo nombre;
+# se usa la que tenga más valores (ver design.md D2).
+
+columnas:
+  - {origen: "Cliente",              destino: cliente,                tipo: texto, longitud: 100}
+  - {origen: "destinatario",         destino: destinatario,           tipo: texto, longitud: 150}
+  - {origen: "Ciudad Org.",          destino: ciudad_origen,          tipo: texto, longitud: 60}
+  - {origen: "BP Centro Org",        destino: bp_centro_origen,       tipo: id,    longitud: 20}
+  - {origen: "Centro Org",           destino: centro_origen,          tipo: texto, longitud: 100}
+  - {origen: "Ciudad Dest.",         destino: ciudad_destino,         tipo: texto, longitud: 60}
+  - {origen: "BP Centro Dest.",      destino: bp_centro_destino,      tipo: id,    longitud: 20}
+  - {origen: "Centro Dest.",         destino: centro_destino,         tipo: texto, longitud: 100}
+  - {origen: "BP Origen FU",         destino: bp_origen_fu,           tipo: id,    longitud: 20}
+  - {origen: "BP Destino FU",        destino: bp_destino_fu,          tipo: id,    longitud: 20}
+  - {origen: "Factura",              destino: factura,                tipo: id,    longitud: 50, obligatoria: true}
+  - {origen: "Dir. Cliente",         destino: direccion_cliente,      tipo: texto, longitud: 250}
+  - {origen: "Fecha Entrega",        destino: fecha_entrega,          tipo: fecha_hora}
+  - {origen: "Ultima Ubicacion",     destino: ultima_ubicacion,       tipo: texto, longitud: 100}
+  - {origen: "Remision",             destino: remision,               tipo: id,    longitud: 30}
+  - {origen: "Fecha de Entrega Pla", destino: fecha_entrega_planeada, tipo: fecha_hora}
+  - {origen: "Fecha de Cumplido",    destino: fecha_cumplido,         tipo: fecha_hora}
+  - {origen: "Cajas",                destino: cajas,                  tipo: entero}
+  - {origen: "Kilos",                destino: kilos,                  tipo: decimal, escala: 3, ambiguo: miles,   guardar_txt: true}
+  - {origen: "Volumen",              destino: volumen,                tipo: decimal, escala: 6, ambiguo: decimal, guardar_txt: true}
+  - {origen: "Ult. Evento",          destino: ultimo_evento,          tipo: texto, longitud: 100}
+  - {origen: "Sigla Causal",         destino: sigla_causal,           tipo: texto, longitud: 30}
+  - {origen: "Novedad.",             destino: novedad,                tipo: texto, longitud: 250}
+  - {origen: "Cl. Expedicion",       destino: clase_expedicion,       tipo: texto, longitud: 10, obligatoria: true}
+  - {origen: "Cl. Movimiento",       destino: clase_movimiento,       tipo: texto, longitud: 10}
+  - {origen: "Conductor",            destino: conductor,              tipo: texto, longitud: 150}
+  - {origen: "Telefono",             destino: telefono,               tipo: texto, longitud: 50}
+  - {origen: "Placa",                destino: placa,                  tipo: texto, longitud: 30}
+  - {origen: "Manifiesto",           destino: manifiesto,             tipo: id,    longitud: 30}
+  - {origen: "Carta Porte",          destino: carta_porte,            tipo: id,    longitud: 60}
+  - {origen: "Orden de Compra",      destino: orden_compra,           tipo: id,    longitud: 60}
+  - {origen: "Orden de Pedido",      destino: orden_pedido,           tipo: id,    longitud: 60}
+  - {origen: "Orden de Entrega/Del", destino: orden_entrega,          tipo: id,    longitud: 60}
+  - {origen: "Cl Doc FWO",           destino: clase_doc_fwo,          tipo: texto, longitud: 10, obligatoria: true}
+  - {origen: "Fecha de cita de com", destino: fecha_cita,             tipo: fecha_hora}
+  - {origen: "On Time",              destino: on_time,                tipo: texto, longitud: 20}
+  - {origen: "Documento Escaneado",  destino: documento_escaneado,    tipo: texto, longitud: 30}
+  - {origen: "Tipo de ruta",         destino: tipo_ruta,              tipo: texto, longitud: 30}
+  - {origen: "Fecha de Factura",     destino: fecha_factura,          tipo: fecha, obligatoria: true}
+  - {origen: "Fec. Compromiso",      destino: fecha_compromiso,       tipo: fecha}
+  - {origen: "Fecha de Operación",   destino: fecha_operacion,        tipo: fecha, alias: ["Fecha de Operacion"]}
+  - {origen: "Fecha de LeadTime",    destino: fecha_leadtime,         tipo: fecha}
+  - {origen: "Vlr. declarado",       destino: valor_declarado,        tipo: decimal, escala: 2}

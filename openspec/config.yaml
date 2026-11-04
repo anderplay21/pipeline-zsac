@@ -1,0 +1,51 @@
+schema: spec-driven
+
+context: |
+  Language: es
+  All artifacts must be written in es.
+  Keep OpenSpec structural headings and SHALL/MUST keywords in English.
+
+  Proyecto: pipeline-zsac — ETL que consolida los reportes mensuales ZSAC (exportación
+  SAP de despachos/entregas de ICOLTRANS) y los carga por upsert a SQL Server.
+
+  Origen: carpeta OneDrive
+    C:\Users\aguzman\OneDrive - Industria Colombiana de Logistica y Transporte\Documentos\ZSAC CONSOLIDADO
+  Archivos ZSAC_<MES>_<AAAA>.xlsx, hoja "BD", 44 columnas, ~50-70k filas cada uno.
+  Las hojas traen autofiltro con filas ocultas: se leen TODAS las filas.
+  Fechas como texto dd.MM.yyyy-HH:mm o como serial de Excel; IDs con ceros a la izquierda.
+
+  Destino: SQL Server 2025 local (ICMEMEOPERACI02), base AnaliticaOperativa,
+  intercalación Modern_Spanish_CI_AS, ODBC Driver 18, autenticación Windows.
+  Esquemas staging (carga cruda tipada) y core (hechos); bitácora compartida core.ETL_Control.
+
+  Stack: Python 3.14 (venv env/), pandas, python-calamine, pyodbc, pyyaml, pytest.
+  Ejecución manual por CLI y programada con el Programador de tareas de Windows.
+
+  Convenciones:
+  - Código, comentarios, logs y artefactos en español.
+  - Columnas de tablas nuevas en snake_case sin tildes.
+  - El upsert nunca borra histórico (sin WHEN NOT MATCHED BY SOURCE).
+  - Filas inválidas van a tabla de rechazos con motivo; no detienen la corrida.
+  - Patrones de referencia: C:\Users\aguzman\pipeline-analitica-ontime (db.py, cargar_sql.py, merge con RowHash).
+
+# Per-artifact rules (optional)
+# Add custom rules for specific artifacts.
+# Example:
+#   rules:
+#     proposal:
+#       - Keep proposals under 500 words
+#       - Always state what is out of scope
+#     tasks:
+#       - Break tasks into chunks of max 2 hours
+
+# Per-operation guidance (optional)
+# Add advisory guidance for how apply and archive work should be conducted.
+# This is separate from artifact rules above.
+# Example:
+#   operations:
+#     apply:
+#       guidance:
+#         - Keep test summaries concise
+#     archive:
+#       guidance:
+#         - Summarize the archive outcome before finishing
